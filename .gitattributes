@@ -1,0 +1,7 @@
+# Set default behavior for line endings
+* text=auto eol=crlf
+
+# Denote files that are truly binary and should not be modified
+*.png binary
+*.jpg binary
+
