@@ -1,13 +1,18 @@
-type Person = { name: string; birthYear: number; isAlive: boolean };
+type PersonData = {
+  name: string;
+  birthYear: number;
+  isAlive: boolean;
+  spouse?: PersonNode;
+};
 
 class PersonNode {
-  data: Person;
+  private data: PersonData;
 
-  constructor(person: Person) {
-    this.data = person;
+  constructor(personData: PersonData) {
+    this.data = personData;
   }
 
-  getData(): Person {
+  getData(): PersonData {
     return this.data;
   }
 }
