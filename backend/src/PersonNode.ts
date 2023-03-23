@@ -1,15 +1,15 @@
-type Person = { name: string, birthYear: number, isAlive: boolean }
+type Person = { name: string; birthYear: number; isAlive: boolean };
 
 class PersonNode {
-  data: Person
-  
+  data: Person;
+
   constructor(person: Person) {
-  this.data = person
+    this.data = person;
   }
-  
+
   getData(): Person {
-    return this.data
+    return this.data;
   }
 }
 
-export = PersonNode
+export = PersonNode;
