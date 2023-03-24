@@ -16,5 +16,9 @@
     "mongoose": "^7.0.3",
     "ts-jest": "^29.0.5",
     "typescript": "^5.0.2"
+  },
+  "dependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "bcrypt": "^5.1.0"
   }
 }
