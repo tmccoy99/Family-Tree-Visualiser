@@ -1,9 +1,15 @@
-const { Schema, model } = require('mongoose');
+import { Schema, model, Document } from 'mongoose';
 
-const userSchema = new Schema({
+interface IUser extends Document {
+  email: string;
+  password: string;
+}
+
+const userSchema = new Schema<IUser>({
   email: { type: String, required: true },
   password: { type: String, required: true },
 });
 
-const User = new model('User', userSchema);
-export default User;
+const UserModel = model<IUser>('User', userSchema);
+
+export default UserModel;
