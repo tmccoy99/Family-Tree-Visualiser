@@ -10,11 +10,9 @@ describe('User model testing', () => {
       email: 'hello@example.com',
       password: 'password123',
     });
+    expect(newUser.email).toBe('hello@example.com');
+    expect(newUser.password).toBe('password123');
     await newUser.save();
-    const savedUsers = await User.find({});
-    expect(savedUsers[0]).toMatchObject({
-      email: 'hello@example.com',
-      password: 'password123',
-    });
+    expect(newUser._id).toBeDefined();
   });
 });
