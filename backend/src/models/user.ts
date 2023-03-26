@@ -11,7 +11,7 @@ const userSchema = new Schema<IUser>({
   password: { type: String, required: true },
 });
 
-userSchema.pre('save', async function (next): Promise<void> {
+userSchema.pre('save', async function (next: () => void): Promise<void> {
   const saltRounds = 10;
   this.password = await bcrypt.hash(this.password, saltRounds);
   next();
