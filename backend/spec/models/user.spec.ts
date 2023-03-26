@@ -52,16 +52,31 @@ describe('User model testing', () => {
   });
 
   describe('password encryption testing', () => {
-    test('new user passwords are encrypted on save', async () => {
+    test('passwords for new users are encrypted on save', async () => {
       const newUser = new User({
         email: 'hello@example.com',
         password: 'password123',
       });
-      (jest.spyOn(bcrypt, 'hash') as jest.Mock).mockResolvedValueOnce(
-        'hashed password'
-      );
+      const mockHashFunction = jest.spyOn(bcrypt, 'hash') as jest.Mock;
+      mockHashFunction.mockResolvedValueOnce('hashed password');
       await newUser.save();
       expect(newUser.password).toBe('hashed password');
+      expect(mockHashFunction).toHaveBeenCalledWith('password123', 10);
     });
+  });
+
+  test('modified passwords are re-encrypted on save', async () => {
+    const newUser = new User({
+      email: 'hello@example.com',
+      password: 'password123',
+    });
+    const mockHashFunction = jest.spyOn(bcrypt, 'hash') as jest.Mock;
+    mockHashFunction.mockResolvedValueOnce('first hash');
+    await newUser.save();
+    mockHashFunction.mockResolvedValueOnce('re-hashed password');
+    newUser.password = 'new password';
+    await newUser.save();
+    expect(newUser.password).toBe('re-hashed password');
+    expect(mockHashFunction).toHaveBeenLastCalledWith('new password', 10);
   });
 });
