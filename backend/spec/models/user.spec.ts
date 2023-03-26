@@ -1,11 +1,17 @@
 import User from '../../src/models/user';
 import '../mongodb_test_setup';
 import bcrypt from 'bcrypt';
+jest.mock('bcrypt', () => ({
+  hash: jest
+    .fn()
+    .mockImplementation((password: string): string => password) as jest.Mock,
+}));
+const mockHashFunction = bcrypt.hash as jest.Mock;
 
 describe('User model testing', () => {
   beforeEach(async () => {
     await User.deleteMany({});
-    jest.clearAllMocks();
+    mockHashFunction.mockClear();
   });
 
   describe('basic tests', () => {
@@ -57,7 +63,6 @@ describe('User model testing', () => {
         email: 'hello@example.com',
         password: 'password123',
       });
-      const mockHashFunction = jest.spyOn(bcrypt, 'hash') as jest.Mock;
       mockHashFunction.mockResolvedValueOnce('hashed password');
       await newUser.save();
       expect(newUser.password).toBe('hashed password');
@@ -70,8 +75,6 @@ describe('User model testing', () => {
       email: 'hello@example.com',
       password: 'password123',
     });
-    const mockHashFunction = jest.spyOn(bcrypt, 'hash') as jest.Mock;
-    mockHashFunction.mockResolvedValueOnce('first hash');
     await newUser.save();
     mockHashFunction.mockResolvedValueOnce('re-hashed password');
     newUser.password = 'new password';
