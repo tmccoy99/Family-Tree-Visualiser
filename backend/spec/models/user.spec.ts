@@ -1,25 +1,24 @@
-import User from '../../src/models/user';
+import User, { IUser } from '../../src/models/user';
 import '../mongodb_test_setup';
 import bcrypt from 'bcrypt';
-import mongoose from 'mongoose';
-console.log(bcrypt.hash('', 10));
 jest.mock('bcrypt', () => ({
   hash: jest.fn().mockImplementation((password: string): string => password),
 }));
 const mockHashFunction = bcrypt.hash as jest.Mock;
 
 describe('User model testing', () => {
+  let newUser: IUser;
   beforeEach(async () => {
     await User.deleteMany({});
     mockHashFunction.mockClear();
+    newUser = new User({
+      email: 'hello@example.com',
+      password: 'password123',
+    });
   });
 
   describe('basic tests', () => {
     test('can create and save new user document with email and password', async () => {
-      const newUser = new User({
-        email: 'hello@example.com',
-        password: 'password123',
-      });
       expect(newUser.email).toBe('hello@example.com');
       expect(newUser.password).toBe('password123');
       await newUser.save();
@@ -59,10 +58,6 @@ describe('User model testing', () => {
 
   describe('password encryption testing', () => {
     test('passwords for new users are encrypted on save', async () => {
-      const newUser = new User({
-        email: 'hello@example.com',
-        password: 'password123',
-      });
       mockHashFunction.mockResolvedValueOnce('hashed password');
       await newUser.save();
       expect(newUser.password).toBe('hashed password');
@@ -71,10 +66,6 @@ describe('User model testing', () => {
   });
 
   test('modified passwords are re-encrypted on save', async () => {
-    const newUser = new User({
-      email: 'hello@example.com',
-      password: 'password123',
-    });
     await newUser.save();
     mockHashFunction.mockResolvedValueOnce('re-hashed password');
     newUser.password = 'new password';
@@ -84,10 +75,6 @@ describe('User model testing', () => {
   });
 
   test('users can be modified without re-hashing password if password unchanged', async () => {
-    const newUser = new User({
-      email: 'hello@example.com',
-      password: 'password123',
-    });
     await newUser.save();
     newUser.email = 'newemail@talktalk.net';
     await newUser.save();
@@ -95,11 +82,6 @@ describe('User model testing', () => {
   });
 
   test('hashing errors are passed on by the pre save function', () => {
-    const newUser = new User({
-      email: 'hello@example.com',
-      password: 4,
-    });
-
     const mockError = new Error('mock error');
     mockHashFunction.mockRejectedValueOnce(mockError);
     newUser.save().catch((err) => {

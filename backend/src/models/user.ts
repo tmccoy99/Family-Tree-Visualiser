@@ -27,4 +27,4 @@ userSchema.pre(
 );
 const UserModel = model<IUser>('User', userSchema);
 
-export default UserModel;
+export { UserModel as default, IUser };
