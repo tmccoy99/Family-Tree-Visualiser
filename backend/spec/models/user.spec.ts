@@ -2,9 +2,7 @@ import User from '../../src/models/user';
 import '../mongodb_test_setup';
 import bcrypt from 'bcrypt';
 jest.mock('bcrypt', () => ({
-  hash: jest
-    .fn()
-    .mockImplementation((password: string): string => password) as jest.Mock,
+  hash: jest.fn().mockImplementation((password: string): string => password),
 }));
 const mockHashFunction = bcrypt.hash as jest.Mock;
 
@@ -81,5 +79,16 @@ describe('User model testing', () => {
     await newUser.save();
     expect(newUser.password).toBe('re-hashed password');
     expect(mockHashFunction).toHaveBeenLastCalledWith('new password', 10);
+  });
+
+  test('users can be modified without re-hashing password if password unchanged', async () => {
+    const newUser = new User({
+      email: 'hello@example.com',
+      password: 'password123',
+    });
+    await newUser.save();
+    newUser.email = 'newemail@talktalk.net';
+    await newUser.save();
+    expect(mockHashFunction.mock.calls.length).toBe(1);
   });
 });
