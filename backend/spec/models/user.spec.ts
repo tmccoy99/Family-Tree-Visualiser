@@ -88,4 +88,11 @@ describe('User model testing', () => {
       expect(err).toEqual(mockError);
     });
   });
+
+  describe('password validation testing', () => {
+    test('calling validate with correct password returns true', async () => {
+      await newUser.save();
+      expect(await newUser.validatePassword('password123')).toBe(true);
+    });
+  });
 });

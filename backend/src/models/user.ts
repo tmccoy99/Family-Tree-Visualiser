@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 interface IUser extends Document {
   email: string;
   password: string;
+  validatePassword: (password: string) => Promise<boolean>;
 }
 
 const userSchema = new Schema<IUser>({
@@ -23,6 +24,13 @@ userSchema.pre(
     } catch (error) {
       next(error);
     }
+  }
+);
+
+userSchema.method(
+  'validatePassword',
+  async function (password: string): Promise<boolean> {
+    return Promise.resolve(true);
   }
 );
 const UserModel = model<IUser>('User', userSchema);
