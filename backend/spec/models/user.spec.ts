@@ -102,11 +102,21 @@ describe('User model testing', () => {
     beforeEach(() => {
       mockCompareFunction.mockClear();
     });
+
     test('calling validatePassword with correct password returns true after validation with bcrypt', async () => {
       await newUser.save();
       expect(await newUser.validatePassword('password123')).toBe(true);
       expect(mockCompareFunction).toHaveBeenCalledWith(
         'password123',
+        'hashed password123'
+      );
+    });
+
+    test('calling validatePassword with incorrect password returns false after validatin with bcrypt', async () => {
+      await newUser.save();
+      expect(await newUser.validatePassword('wrong password')).toBe(false);
+      expect(mockCompareFunction).toHaveBeenCalledWith(
+        'wrong password',
         'hashed password123'
       );
     });
