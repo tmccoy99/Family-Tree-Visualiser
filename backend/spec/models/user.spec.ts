@@ -1,6 +1,8 @@
 import User from '../../src/models/user';
 import '../mongodb_test_setup';
 import bcrypt from 'bcrypt';
+import mongoose from 'mongoose';
+console.log(bcrypt.hash('', 10));
 jest.mock('bcrypt', () => ({
   hash: jest.fn().mockImplementation((password: string): string => password),
 }));
@@ -90,5 +92,18 @@ describe('User model testing', () => {
     newUser.email = 'newemail@talktalk.net';
     await newUser.save();
     expect(mockHashFunction.mock.calls.length).toBe(1);
+  });
+
+  test('hashing errors are passed on by the pre save function', () => {
+    const newUser = new User({
+      email: 'hello@example.com',
+      password: 4,
+    });
+
+    const mockError = new Error('mock error');
+    mockHashFunction.mockRejectedValueOnce(mockError);
+    newUser.save().catch((err) => {
+      expect(err).toEqual(mockError);
+    });
   });
 });

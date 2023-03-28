@@ -11,13 +11,20 @@ const userSchema = new Schema<IUser>({
   password: { type: String, required: true },
 });
 
-userSchema.pre('save', async function (next: () => void): Promise<void> {
-  if (this.isModified('password') || this.isNew) {
-    const saltRounds = 10;
-    this.password = await bcrypt.hash(this.password, saltRounds);
+userSchema.pre(
+  'save',
+  async function (next: (error?: any) => void): Promise<void> {
+    try {
+      if (this.isModified('password') || this.isNew) {
+        const saltRounds = 10;
+        this.password = await bcrypt.hash(this.password, saltRounds);
+      }
+      next();
+    } catch (error) {
+      next(error);
+    }
   }
-  next();
-});
+);
 const UserModel = model<IUser>('User', userSchema);
 
 export default UserModel;
