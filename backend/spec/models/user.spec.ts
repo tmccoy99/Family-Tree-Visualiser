@@ -8,6 +8,7 @@ jest.mock('bcrypt', () => ({
       (password: string, saltRounds: number): Promise<string> =>
         Promise.resolve(`hashed ${password}`)
     ),
+  compare: jest.fn(),
 }));
 const mockHashFunction = bcrypt.hash as jest.Mock;
 describe('User model testing', () => {
@@ -91,19 +92,23 @@ describe('User model testing', () => {
     });
   });
 
-  // describe('password validation testing', () => {
-  //   const mockCompareFunction = jest.spyOn(bcrypt, 'compare') as jest.Mock;
-  //   mockCompareFunction.mockImplementation(
-  //     (password: string, hash: string): Promise<boolean> => {
-  //       return Promise.resolve(mockHashFunction(password) === hash);
-  //     }
-  //   );
-  //   mock
-  //   test('calling validatePassword with correct password returns true', async () => {
-  //     mockHashFunction.mockResolved
-  //     await newUser.save();
-  //     expect(await newUser.validatePassword('password123')).toBe(true);
-  //     expect(mockCompareFunction).toHaveBeenCalledWith('password123')
-  //   });
-  // });
+  describe('password validation testing', () => {
+    const mockCompareFunction = bcrypt.compare as jest.Mock;
+    mockCompareFunction.mockImplementation(
+      async (password: string, hash: string): Promise<boolean> => {
+        return (await mockHashFunction(password, 10)) === hash;
+      }
+    );
+    beforeEach(() => {
+      mockCompareFunction.mockClear();
+    });
+    test('calling validatePassword with correct password returns true after validation with bcrypt', async () => {
+      await newUser.save();
+      expect(await newUser.validatePassword('password123')).toBe(true);
+      expect(mockCompareFunction).toHaveBeenCalledWith(
+        'password123',
+        'hashed password123'
+      );
+    });
+  });
 });

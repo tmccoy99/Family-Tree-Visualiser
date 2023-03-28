@@ -30,7 +30,7 @@ userSchema.pre(
 userSchema.method(
   'validatePassword',
   async function (password: string): Promise<boolean> {
-    return Promise.resolve(true);
+    return await bcrypt.compare(password, this.password);
   }
 );
 const UserModel = model<IUser>('User', userSchema);
