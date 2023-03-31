@@ -5,6 +5,12 @@ interface ITokenMethods {
   generate: (userID: string) => string;
 }
 
+interface Payload {
+  userID: string;
+  iat: number;
+  exp: number;
+}
+
 const TokenMethods: ITokenMethods = {
   generate: (userID) => {
     return JWT.sign(
@@ -18,4 +24,4 @@ const TokenMethods: ITokenMethods = {
   },
 };
 
-export default TokenMethods;
+export { TokenMethods as default, Payload };

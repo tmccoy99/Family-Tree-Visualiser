@@ -1,6 +1,5 @@
-import TokenMethods from '../../src/models/TokenMethods';
-import JWT, { Secret } from 'jsonwebtoken';
-const secret = process.env.JWT_SECRET as Secret;
+import TokenMethods, { Payload } from '../../src/models/TokenMethods';
+import JWT from 'jsonwebtoken';
 
 describe('TokenMethods testing', () => {
   describe('generate method testing', () => {
@@ -8,6 +7,13 @@ describe('TokenMethods testing', () => {
       const token = TokenMethods.generate('user123');
       expect(typeof token).toBe('string');
       expect(token.length).toBeGreaterThan(0);
+    });
+
+    test('the payload of the string can be decoded, contains userID and has 10 minutes of duration', () => {
+      const token = TokenMethods.generate('user123');
+      const payload = JWT.decode(token) as Payload;
+      expect(payload.userID).toBe('user123');
+      expect(payload.exp - payload.iat).toBe(600);
     });
   });
 });
