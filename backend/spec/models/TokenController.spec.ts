@@ -1,4 +1,4 @@
-import TokenMethods, { Payload } from '../../src/models/TokenMethods';
+import TokenMethods, { Payload } from '../../src/models/TokenController';
 import JWT from 'jsonwebtoken';
 
 describe('TokenMethods testing', () => {
