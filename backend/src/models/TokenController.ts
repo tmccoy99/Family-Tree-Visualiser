@@ -1,8 +1,10 @@
 import JWT, { Secret } from 'jsonwebtoken';
+import { Request, Response } from 'express';
 const secret = process.env.JWT_SECRET as Secret;
 
-interface ITokenMethods {
-  generate: (userID: string) => string;
+interface ITokenController {
+  generateToken: (userID: string) => string;
+  Create: (req: Request, res: Response) => void;
 }
 
 interface Payload {
@@ -11,8 +13,8 @@ interface Payload {
   exp: number;
 }
 
-const TokenMethods: ITokenMethods = {
-  generate: (userID) => {
+const TokenController: ITokenController = {
+  generateToken: (userID) => {
     return JWT.sign(
       {
         userID: userID,
@@ -22,6 +24,11 @@ const TokenMethods: ITokenMethods = {
       secret
     );
   },
+
+  Create: (req, res) => {
+    res.status(400);
+    res.send();
+  },
 };
 
-export { TokenMethods as default, Payload };
+export { TokenController as default, Payload };

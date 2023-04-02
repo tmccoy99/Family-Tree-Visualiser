@@ -1,13 +1,8 @@
 import express, { Express, Request, Response } from 'express';
-
+import tokenRouter from './routes/tokenRouter';
 const app: Express = express();
+
 app.use(express.json());
+app.use('/tokens', tokenRouter);
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello, World!');
-});
-
-app.listen(3000, () => {
-  console.log('Started sever on port 3000');
-});
 export default app;
