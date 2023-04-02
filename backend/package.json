@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon dist/src/app.js",
+    "start": "nodemon",
     "test": "dotenv -e .env -- jest",
     "build": "tsc -p ."
   },
