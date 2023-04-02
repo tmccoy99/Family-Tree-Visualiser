@@ -1,10 +1,19 @@
 import app from './app';
 import http, { Server } from 'http';
+import mongoose from 'mongoose';
 
 const port = 8085;
 app.set('port', port);
 
 const server: Server = http.createServer(app);
+const dbURL: string =
+  process.env.MONGODB_URL || 'mongodb://127.0.0.1:27017/family-tree';
+
+mongoose.connect(dbURL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+} as any);
+
 server.listen(port);
 server.on('listening', onListening);
 process.on('SIGHUP', onShutdown);
@@ -15,8 +24,8 @@ function onListening(): void {
   console.log('Now listening on ' + bind);
 }
 
-async function onShutdown(): Promise<void> {
+function onShutdown(): void {
   console.log('Shutting down server');
-  await server.close();
+  server.close();
   process.exit(0);
 }

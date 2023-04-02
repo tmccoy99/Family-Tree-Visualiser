@@ -1,4 +1,6 @@
-import TokenController, { Payload } from '../../src/models/TokenController';
+import TokenController, {
+  Payload,
+} from '../../src/controllers/TokenController';
 import JWT from 'jsonwebtoken';
 import testRequest from 'supertest';
 import '../mongodb_test_setup';
