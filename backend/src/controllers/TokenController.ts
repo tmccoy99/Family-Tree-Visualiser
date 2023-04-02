@@ -28,11 +28,11 @@ const TokenController: ITokenController = {
 
   Create: async function (req, res) {
     const user: IUser | null = await User.findOne({ email: req.body.email });
-    if (user) {
+    if (!user || !(await user.validatePassword(req.body.password))) {
+      res.status(401).json({ message: 'auth error' });
+    } else {
       const token = TokenController.generateToken(user.id);
       res.status(201).json({ token: token, message: 'OK', userID: user.id });
-    } else {
-      res.status(401).json({ message: 'auth error' });
     }
   },
 };

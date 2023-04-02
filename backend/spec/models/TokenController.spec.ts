@@ -37,16 +37,24 @@ describe('TokenController testing', () => {
     });
   });
 
-  describe('Create token route testing', () => {
-    test('POST /tokens route with an invalid email sends response with status 401 and auth error', async () => {
+  describe('POST /tokens route testing', () => {
+    test('invalid email results in response with status 401 and auth error', async () => {
       const response = await testRequest(app)
         .post('/tokens')
-        .send({ email: 'test123@fake.com', password: 'piyiophph' });
+        .send({ email: 'test123@fake.com', password: 'testpassword' });
       expect(response.status).toBe(401);
       expect(response.body).toEqual({ message: 'auth error' });
     });
 
-    test('POST /tokens with valid email and password sends 201 status, body with token, userID and ok message', async () => {
+    test('invalid password results in response with status 401 and auth error', async () => {
+      const response = await testRequest(app)
+        .post('/tokens')
+        .send({ email: 'user@example.com', password: 'testpassword1' });
+      expect(response.status).toBe(401);
+      expect(response.body).toEqual({ message: 'auth error' });
+    });
+
+    test('valid email and password sends 201 status, body with token, userID and ok message', async () => {
       const response = await testRequest(app).post('/tokens').send({
         email: 'user@example.com',
         password: 'testpassword',
