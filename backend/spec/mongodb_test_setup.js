@@ -13,5 +13,5 @@ beforeAll((done) => {
 });
 
 afterAll(async () => {
-  await mongoose.connection.close(true);
+  await mongoose.connection.close();
 });
