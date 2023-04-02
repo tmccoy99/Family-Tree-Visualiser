@@ -26,8 +26,7 @@ const TokenController: ITokenController = {
   },
 
   Create: (req, res) => {
-    res.status(400);
-    res.send();
+    res.status(401).json({ message: 'auth error' });
   },
 };
 

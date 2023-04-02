@@ -21,11 +21,12 @@ describe('TokenController testing', () => {
   });
 
   describe('Create token route testing', () => {
-    test('POST /tokens route with an invalid email sends status 400 response', async () => {
+    test('POST /tokens route with an invalid email sends response with status 401 and auth error', async () => {
       const response = await testRequest(app)
         .post('/tokens')
         .send({ email: 'test123@fake.com', password: 'piyiophph' });
-      expect(response.status).toBe(400);
+      expect(response.status).toBe(401);
+      expect(response.body).toEqual({ message: 'auth error' });
     });
   });
 });
