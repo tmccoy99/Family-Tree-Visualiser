@@ -7,12 +7,20 @@ interface IUserController {
 
 const UserController: IUserController = {
   Create: async function (req, res) {
-    const newUser = new User({
-      email: req.body.email,
-      password: req.body.password,
-    });
-    await newUser.save();
-    res.status(201).json({ message: 'OK' });
+    try {
+      const newUser = new User({
+        email: req.body.email,
+        password: req.body.password,
+      });
+      await newUser.save();
+      res.status(201).json({ message: 'OK' });
+    } catch (err: any) {
+      if (err.code === 11000) {
+        res.status(409).json({ message: 'Duplicate email' });
+      } else {
+        res.status(500).json({ message: 'Unknown err' });
+      }
+    }
   },
 };
 

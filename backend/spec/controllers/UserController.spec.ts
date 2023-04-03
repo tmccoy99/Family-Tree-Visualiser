@@ -29,5 +29,26 @@ describe('UserController testing', () => {
       });
       expect(savedUser).not.toBeNull();
     });
+
+    test('if email is a duplicate, sends 409 status and duplicate email message', async () => {
+      const user: IUser = new User({
+        email: 'hello@testing.com',
+        password: 'testpassword',
+      });
+      await user.save();
+      const response = await testRequest(app)
+        .post('/users')
+        .send({ email: 'hello@testing.com', password: 'otherpassword' });
+      expect(response.status).toBe(409);
+      expect(response.body.message).toBe('Duplicate email');
+    });
+
+    test('other errors return status code 500 and unknown error message', async () => {
+      const response = await testRequest(app)
+        .post('/users')
+        .send({ email: 'hello@testing.com' });
+      expect(response.status).toBe(500);
+      expect(response.body.message).toBe('Unknown err');
+    });
   });
 });
