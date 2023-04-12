@@ -1,10 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { SignUpFormComponent } from './sign-up-form/sign-up-form.component';
+import { FamilyTreeComponent } from './family-tree/family-tree.component';
 
-const routes: Routes = [];
+const routes: Routes = [
+  { path: '', redirectTo: '/landing', pathMatch: 'full' },
+  { path: '/landing', component: SignUpFormComponent },
+  { path: '/home', component: FamilyTreeComponent },
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

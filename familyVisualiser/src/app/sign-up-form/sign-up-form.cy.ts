@@ -1,6 +1,6 @@
 import { Interception } from 'cypress/types/net-stubbing';
 import { SignUpFormComponent } from './sign-up-form.component';
-
+import { RouterTestingModule } from '@angular/router/testing';
 describe('Sign up form', () => {
   test('it should have an email input and a password input', () => {
     cy.mount(SignUpFormComponent);
@@ -24,4 +24,6 @@ describe('Sign up form', () => {
       expect(interception.request.body.password).to.equal('test');
     });
   });
+
+  test('successful signups navigate to family tree page, set user_id and token in local storage', () => {});
 });
