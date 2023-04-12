@@ -1,5 +1,5 @@
 <form>
-  <input id="signup-email-input">
-  <input id="signup-password-input">
-  <button id="submit-signup">Submit</button>
+  <input #email id="signup-email-input">
+  <input #password id="signup-password-input">
+  <button (click)="requestNewUser(email.value, password.value)" id="submit-signup">Submit</button>
 </form>
