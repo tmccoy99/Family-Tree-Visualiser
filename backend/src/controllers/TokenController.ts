@@ -6,7 +6,7 @@ interface ITokenController {
   Create: (req: Request, res: Response) => void;
 }
 
-interface Payload {
+interface TokenPayload {
   userID: string;
   iat: number;
   exp: number;
@@ -35,4 +35,4 @@ const TokenController: ITokenController = {
   },
 };
 
-export { TokenController as default, Payload, generateToken };
+export { TokenController as default, TokenPayload, generateToken };
