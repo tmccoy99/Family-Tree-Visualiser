@@ -5,8 +5,8 @@ import { FamilyTreeComponent } from './family-tree/family-tree.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/landing', pathMatch: 'full' },
-  { path: '/landing', component: SignUpFormComponent },
-  { path: '/home', component: FamilyTreeComponent },
+  { path: 'landing', component: SignUpFormComponent },
+  { path: 'home', component: FamilyTreeComponent },
 ];
 
 @NgModule({

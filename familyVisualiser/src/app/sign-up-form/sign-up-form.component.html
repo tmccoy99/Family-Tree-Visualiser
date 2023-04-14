@@ -1,5 +1,7 @@
-<form>
-  <input #email id="signup-email-input" placeholder="Your email">
-  <input #password id="signup-password-input" placeholder="*****">
-  <button (click)="requestNewUser(email.value, password.value)" id="submit-signup">Submit</button>
+<form [formGroup]="signUp" (ngSubmit)="onSubmit(email.value, password.value)">
+  <label for="signup-email-input">Email: </label>
+  <input #email id="signup-email-input" type="text" placeholder="Your email" formControlName="email">
+  <label for="signup-password-input">Password: </label>
+  <input #password id="signup-password-input" type="text" placeholder="*****" formControlName="password">
+  <button type="submit" id="submit-signup">Submit</button>
 </form>
