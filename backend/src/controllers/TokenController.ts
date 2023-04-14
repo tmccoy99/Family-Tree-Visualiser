@@ -1,7 +1,6 @@
 import JWT, { Secret } from 'jsonwebtoken';
 import { Request, Response } from 'express';
 import User, { IUser } from '../models/user';
-const secret = process.env.JWT_SECRET as Secret;
 
 interface ITokenController {
   Create: (req: Request, res: Response) => void;
@@ -20,7 +19,7 @@ function generateToken(userID: string): string {
       iat: Math.floor(Date.now() / 1000),
       exp: Math.floor(Date.now() / 1000) + 10 * 60,
     },
-    secret
+    process.env.JWT_SECRET as Secret
   );
 }
 

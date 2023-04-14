@@ -16,13 +16,15 @@ export class SignUpFormComponent {
   constructor(private router: Router) {}
 
   async onSubmit(email: string, password: string): Promise<void> {
-    await fetch('http://localhost:8085/users', {
+    const response: Response = await fetch('http://localhost:8085/users', {
       method: 'POST',
       body: JSON.stringify({ email: email, password: password }),
       headers: {
         'Content-Type': 'application/json',
       },
     });
-    // this.router.navigate(['/home']);
+    if (response.status === 201) {
+      this.router.navigate(['/home']);
+    }
   }
 }

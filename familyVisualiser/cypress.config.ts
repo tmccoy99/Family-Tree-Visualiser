@@ -1,12 +1,12 @@
-import { defineConfig } from "cypress";
+import { defineConfig } from 'cypress';
 
 export default defineConfig({
   component: {
     devServer: {
-      framework: "angular",
-      bundler: "webpack",
+      framework: 'angular',
+      bundler: 'webpack',
     },
-    specPattern: "**/*.cy.ts",
+    specPattern: '**/*.cy.ts',
     video: false,
   },
 
@@ -14,5 +14,6 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
+    baseUrl: 'http://localhost:4200',
   },
 });
