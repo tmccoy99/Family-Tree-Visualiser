@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import User from '../models/user';
+import { generateToken } from './TokenController';
 
 interface IUserController {
   Create: (req: Request, res: Response) => Promise<void>;
@@ -13,7 +14,8 @@ const UserController: IUserController = {
         password: req.body.password,
       });
       await newUser.save();
-      res.status(201).json({ message: 'OK' });
+      const token: string = generateToken(newUser.id);
+      res.status(201).json({ token: token, message: 'OK', userID: newUser.id });
     } catch (err: any) {
       if (err.code === 11000) {
         res.status(409).json({ message: 'Duplicate email' });

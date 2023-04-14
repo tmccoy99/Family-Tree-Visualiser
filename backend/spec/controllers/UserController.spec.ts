@@ -12,12 +12,14 @@ describe('UserController testing', () => {
     await User.deleteMany({});
   });
   describe('POST /users route', () => {
-    test('response to valid email and password has status 201 and message ok', async () => {
+    test('response to valid email and password has status 201 OK, contains userID and token', async () => {
       const response = await testRequest(app)
         .post('/users')
         .send({ email: 'hello@testing.com', password: 'testpassword' });
       expect(response.status).toBe(201);
       expect(response.body.message).toBe('OK');
+      expect(response.body.userID).toBeDefined();
+      expect(response.body.token).toBeDefined();
     });
 
     test('if email and password valid, user will be saved to database', async () => {
