@@ -6,8 +6,7 @@ const port = 8085;
 app.set('port', port);
 
 const server: Server = http.createServer(app);
-const dbURL: string =
-  process.env.MONGODB_URL || 'mongodb://127.0.0.1:27017/family-tree';
+const dbURL: string = `mongodb://127.0.0.1:27017/family-tree-${process.env.NODE_ENV}`;
 
 mongoose.connect(dbURL, {
   useNewUrlParser: true,

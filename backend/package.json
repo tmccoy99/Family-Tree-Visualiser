@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon",
+    "start:test": "set NODE_ENV=test&& nodemon",
     "test": "dotenv -e .env -- jest",
     "build": "tsc -p ."
   },

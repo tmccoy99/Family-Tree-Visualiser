@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { SuccesfulUserResponse } from '../user-response';
 
 @Component({
   selector: 'app-sign-up-form',
@@ -24,7 +25,10 @@ export class SignUpFormComponent {
       },
     });
     if (response.status === 201) {
+      const body: SuccesfulUserResponse = await response.json();
       this.router.navigate(['/home']);
+      window.localStorage.setItem('userID', body.userID);
+      window.localStorage.setItem('token', body.token);
     }
   }
 }

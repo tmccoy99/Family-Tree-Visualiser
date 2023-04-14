@@ -1,5 +1,6 @@
 describe('sign up testing', () => {
   beforeEach(() => {
+    cy.request('http://localhost:8085/dbreset');
     cy.visit('/');
   });
 
@@ -14,5 +15,7 @@ describe('sign up testing', () => {
     cy.get('input#signup-password-input').type('test password');
     cy.get('button#submit-signup').click();
     cy.url().should('include', '/home');
+    expect(window.localStorage.getItem('userID')).to.be.ok;
+    expect(window.localStorage.getItem('token')).to.be.ok;
   });
 });
