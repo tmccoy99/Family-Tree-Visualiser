@@ -1,4 +1,7 @@
-import { Payload, generateToken } from '../../src/controllers/TokenController';
+import {
+  TokenPayload,
+  generateToken,
+} from '../../src/controllers/TokenController';
 import JWT from 'jsonwebtoken';
 import testRequest from 'supertest';
 import '../mongodb_test_setup';
@@ -29,7 +32,7 @@ describe('TokenController testing', () => {
 
     test('the payload of the string can be decoded, contains userID and has 10 minutes of duration', () => {
       const token = generateToken('user123');
-      const payload = JWT.decode(token) as Payload;
+      const payload = JWT.decode(token) as TokenPayload;
       expect(payload.userID).toBe('user123');
       expect(payload.exp - payload.iat).toBe(600);
     });

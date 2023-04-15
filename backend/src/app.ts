@@ -15,7 +15,6 @@ app.use('/dbreset', (req, res) => {
     mongoose.connection.dropDatabase();
     res.status(200).json({ message: 'OK' });
   } else {
-    console.log(process.env.NODE_ENV?.length);
     res.status(403).json({ message: 'Cannot reset db out of test env' });
   }
 });
