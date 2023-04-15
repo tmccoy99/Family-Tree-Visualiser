@@ -69,6 +69,12 @@ button[type="button"] {
   margin: 0 5px;
 }
 
+button:disabled {
+  background-color: #a0a0a0;
+  border-color: #a0a0a0;
+  cursor: not-allowed;
+}
+
 .warning {
   display: inline-block;
   padding: 5px 10px;

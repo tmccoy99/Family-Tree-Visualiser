@@ -7,7 +7,7 @@
     <input #email id="email-input" type="text" placeholder="Your email" formControlName="email">
     <label for="password-input">Password: </label>
     <input #password id="password-input" type="text" placeholder="*****" formControlName="password">
-    <button type="submit" id="user-submit">Submit</button>
+    <button type="submit" id="user-submit" [disabled]="userDetails.invalid">Submit</button>
     <ng-container *ngIf="warning">
       <div class="warning">{{ warning }}</div>
     </ng-container>

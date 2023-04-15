@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SuccesfulUserResponse } from '../user-response';
 import { UserFormState } from '../user-form-state';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-user-form',
@@ -11,8 +12,12 @@ import { UserFormState } from '../user-form-state';
 })
 export class UserFormComponent {
   userDetails = new FormGroup({
-    email: new FormControl(''),
-    password: new FormControl(''),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(5),
+      Validators.maxLength(15),
+    ]),
   });
 
   warning: string = '';
