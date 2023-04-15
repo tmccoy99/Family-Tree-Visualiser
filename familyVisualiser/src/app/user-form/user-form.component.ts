@@ -22,10 +22,12 @@ export class UserFormComponent {
 
   toggleLogIn(): void {
     this.state = UserFormState.Login;
+    this.warning = '';
   }
 
   toggleSignUp(): void {
     this.state = UserFormState.SignUp;
+    this.warning = '';
   }
 
   async onSubmit(email: string, password: string): Promise<void> {
