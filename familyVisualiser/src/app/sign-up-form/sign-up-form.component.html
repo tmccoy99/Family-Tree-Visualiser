@@ -4,4 +4,8 @@
   <label for="signup-password-input">Password: </label>
   <input #password id="signup-password-input" type="text" placeholder="*****" formControlName="password">
   <button type="submit" id="submit-signup">Submit</button>
+  <ng-container *ngIf="warning">
+    <div class="warning">{{ warning }}</div>
+  </ng-container>
 </form>
+

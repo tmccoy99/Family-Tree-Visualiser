@@ -14,6 +14,8 @@ export class SignUpFormComponent {
     password: new FormControl(''),
   });
 
+  warning: string = '';
+
   constructor(private router: Router) {}
 
   async onSubmit(email: string, password: string): Promise<void> {
@@ -24,11 +26,21 @@ export class SignUpFormComponent {
         'Content-Type': 'application/json',
       },
     });
-    if (response.status === 201) {
-      const body: SuccesfulUserResponse = await response.json();
-      window.localStorage.setItem('userID', body.userID);
-      window.localStorage.setItem('token', body.token);
-      this.router.navigate(['/home']);
+    switch (response.status) {
+      case 201: {
+        const body: SuccesfulUserResponse = await response.json();
+        window.localStorage.setItem('userID', body.userID);
+        window.localStorage.setItem('token', body.token);
+        this.router.navigate(['/home']);
+        break;
+      }
+      case 409: {
+        this.warning = 'The provided email is already registered';
+        break;
+      }
+      default: {
+        this.warning = 'Unknown error, please try again later if this persists';
+      }
     }
   }
 }
