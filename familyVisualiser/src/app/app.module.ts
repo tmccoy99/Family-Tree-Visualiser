@@ -4,11 +4,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AppComponent } from './app.component';
-import { SignUpFormComponent } from './sign-up-form/sign-up-form.component';
 import { FamilyTreeComponent } from './family-tree/family-tree.component';
+import { UserFormComponent } from './user-form/user-form.component';
 
 @NgModule({
-  declarations: [AppComponent, SignUpFormComponent, FamilyTreeComponent],
+  declarations: [AppComponent, FamilyTreeComponent, UserFormComponent],
   imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, CommonModule],
   providers: [],
   bootstrap: [AppComponent],

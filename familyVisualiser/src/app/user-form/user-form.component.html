@@ -1,0 +1,15 @@
+<h2>{{state}}</h2>
+<button type="button" id="toggle-sign-up" (click)="toggleSignUp()">Sign Up</button>
+<button type="button" id="toggle-log-in" (click)="toggleLogIn()">Log In</button>
+<form [formGroup]="userDetails" (ngSubmit)="onSubmit(email.value, password.value)">
+  <label for="email-input">Email: </label>
+  <input #email id="email-input" type="text" placeholder="Your email" formControlName="email">
+  <label for="password-input">Password: </label>
+  <input #password id="password-input" type="text" placeholder="*****" formControlName="password">
+  <button type="submit" id="user-submit">Submit</button>
+  <ng-container *ngIf="warning">
+    <div class="warning">{{ warning }}</div>
+  </ng-container>
+</form>
+
+

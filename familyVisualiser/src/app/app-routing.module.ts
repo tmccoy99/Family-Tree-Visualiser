@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SignUpFormComponent } from './sign-up-form/sign-up-form.component';
 import { FamilyTreeComponent } from './family-tree/family-tree.component';
+import { UserFormComponent } from './user-form/user-form.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/landing', pathMatch: 'full' },
-  { path: 'landing', component: SignUpFormComponent },
+  { path: 'landing', component: UserFormComponent },
   { path: 'home', component: FamilyTreeComponent },
 ];
 
