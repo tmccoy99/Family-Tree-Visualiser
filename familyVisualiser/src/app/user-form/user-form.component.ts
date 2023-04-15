@@ -36,7 +36,7 @@ export class UserFormComponent {
   }
 
   async onSubmit(email: string, password: string): Promise<void> {
-    const endUrl: string = this.state === 'Sign Up' ? 'users' : 'tokens';
+    const endUrl: string = this.state === 'Sign up' ? 'users' : 'tokens';
     const response: Response = await fetch(`http://localhost:8085/${endUrl}`, {
       method: 'POST',
       body: JSON.stringify({ email: email, password: password }),
