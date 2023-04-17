@@ -1,4 +1,4 @@
-import FamilyMember from '../../src/models/family-member';
+import FamilyMember, { IFamilyMember } from '../../src/models/family-member';
 import '../mongodb_test_setup';
 import mongoose from 'mongoose';
 
@@ -28,8 +28,7 @@ describe('Family Member Model', () => {
       name: 'Suzie',
       birthYear: 1890,
     });
-    await memberWithPhoto.save();
-    await memberWithoutPhoto.save();
+    await Promise.all([memberWithPhoto.save(), memberWithoutPhoto.save()]);
     expect(memberWithPhoto.imageURL).toBe('example/url');
     expect(memberWithoutPhoto.imageURL).toBe('../../assets/default_photo.png');
   });
@@ -47,5 +46,21 @@ describe('Family Member Model', () => {
     expect(newMember.deathYear).toBe(1990);
     expect(newMember.children).toHaveLength(2);
     expect(newMember.spouse).toBeTruthy();
+  });
+
+  test('spouse reference can populate', async () => {
+    const spouse = new FamilyMember({
+      name: 'Mrs Test',
+      birthYear: '1900',
+    });
+    await spouse.save();
+    const member = new FamilyMember({
+      name: 'Mr Test',
+      birthYear: 1890,
+      spouse: spouse._id,
+    });
+    await member.save();
+    await member.populate('spouse');
+    expect((member.spouse as IFamilyMember).name).toBe('Mrs Test');
   });
 });

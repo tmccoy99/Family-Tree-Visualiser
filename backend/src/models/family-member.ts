@@ -6,7 +6,7 @@ interface IFamilyMember extends Document {
   imageURL: string;
   deathYear?: number;
   children: mongoose.Types.ObjectId[];
-  spouse?: mongoose.Types.ObjectId;
+  spouse?: mongoose.Types.ObjectId | IFamilyMember;
 }
 
 const FamilyMemberSchema = new Schema<IFamilyMember>({
@@ -18,4 +18,5 @@ const FamilyMemberSchema = new Schema<IFamilyMember>({
   spouse: { type: mongoose.Types.ObjectId, ref: 'Family Member' },
 });
 
-export default model<IFamilyMember>('Family Member', FamilyMemberSchema);
+const FamilyMember = model<IFamilyMember>('Family Member', FamilyMemberSchema);
+export { FamilyMember as default, IFamilyMember };
