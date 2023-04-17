@@ -26,34 +26,36 @@ describe('Family Controller testing', () => {
   });
 
   describe('POST /members route', () => {
-    test('with token, userID and required information, sends 201 response', async () => {
-      const response: testRequest.Response = await testRequest(app)
-        .post('/members')
-        .set({ Authorization: `Bearer ${token}` })
-        .send({
-          userID: testUser.id,
-          name: 'Jeff',
-          birthYear: 1999,
-          additionType: 'root',
-        });
-      expect(response.status).toBe(201);
-    });
+    describe('with token, userID and required information', () => {
+      test('sends 201 response', async () => {
+        const response: testRequest.Response = await testRequest(app)
+          .post('/members')
+          .set({ Authorization: `Bearer ${token}` })
+          .send({
+            userID: testUser.id,
+            name: 'Jeff',
+            birthYear: 1999,
+            additionType: 'root',
+          });
+        expect(response.status).toBe(201);
+      });
 
-    test('with token, userID and required information, saves family member into database', async () => {
-      await testRequest(app)
-        .post('/members')
-        .set({ Authorization: `Bearer ${token}` })
-        .send({
-          userID: testUser.id,
+      test('saves family member into database', async () => {
+        await testRequest(app)
+          .post('/members')
+          .set({ Authorization: `Bearer ${token}` })
+          .send({
+            userID: testUser.id,
+            name: 'Jeff',
+            birthYear: 1999,
+            additionType: 'root',
+          });
+        const savedMember = await FamilyMember.findOne({});
+        expect(savedMember).toBeTruthy();
+        expect(savedMember).toMatchObject({
           name: 'Jeff',
           birthYear: 1999,
-          additionType: 'root',
         });
-      const savedMember = await FamilyMember.findOne({});
-      expect(savedMember).toBeTruthy();
-      expect(savedMember).toMatchObject({
-        name: 'Jeff',
-        birthYear: 1999,
       });
     });
   });
