@@ -63,4 +63,25 @@ describe('Family Member Model', () => {
     await member.populate('spouse');
     expect((member.spouse as IFamilyMember).name).toBe('Mrs Test');
   });
+
+  test('children references can populate', async () => {
+    const child1 = new FamilyMember({
+      name: 'Bob',
+      birthYear: '1900',
+    });
+    const child2 = new FamilyMember({
+      name: 'Ellie',
+      birthYear: '1930',
+    });
+    await Promise.all([child1.save(), child2.save()]);
+    const parent = new FamilyMember({
+      name: 'Erica',
+      birthYear: '1850',
+      children: [child1._id, child2._id],
+    });
+    await parent.save();
+    await parent.populate('children');
+    expect((parent.children[0] as IFamilyMember).name).toBe('Bob');
+    expect((parent.children[1] as IFamilyMember).name).toBe('Ellie');
+  });
 });

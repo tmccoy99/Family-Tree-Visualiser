@@ -5,7 +5,7 @@ interface IFamilyMember extends Document {
   birthYear: number;
   imageURL: string;
   deathYear?: number;
-  children: mongoose.Types.ObjectId[];
+  children: (mongoose.Types.ObjectId | IFamilyMember)[];
   spouse?: mongoose.Types.ObjectId | IFamilyMember;
 }
 
