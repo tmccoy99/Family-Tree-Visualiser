@@ -1,1 +1,11 @@
 <h2>Your Family Tree</h2>
+<div class="member-container">
+  <img class="personal-photo" [src]="root.imageURL">
+  <h3>{{root.name}}</h3>
+  <ng-container *ngIf="root.deathYear; else birthYearOnly">
+    <p class="lifespan">{{root.birthYear}} - {{root.deathYear}}</p>
+  </ng-container>
+  <ng-template #birthYearOnly>
+    <p class="lifespan">Born: {{root.birthYear}}</p>
+  </ng-template>
+</div>

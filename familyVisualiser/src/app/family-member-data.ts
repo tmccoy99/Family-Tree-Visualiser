@@ -11,7 +11,7 @@ const einstein: FamilyMember = {
   name: 'Albert Einstein',
   birthYear: 1879,
   deathYear: 1955,
-  imageURL: '/src/assets/',
+  imageURL: '../../assets/einstein.png',
   children: [],
 };
 
