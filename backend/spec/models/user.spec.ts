@@ -1,6 +1,8 @@
 import User, { IUser } from '../../src/models/user';
 import '../mongodb_test_setup';
 import bcrypt from 'bcrypt';
+import mongoose from 'mongoose';
+
 jest.mock('bcrypt', () => ({
   hash: jest
     .fn()
@@ -58,6 +60,16 @@ describe('User model testing', () => {
       await user2.save().catch((err) => {
         expect(err).not.toBeNull();
       });
+    });
+
+    test('can optionally save a rootID field containing an object ID', async () => {
+      newUser = new User({
+        email: 'hello@example.com',
+        password: 'password123',
+        rootID: new mongoose.Types.ObjectId(),
+      });
+      await newUser.save();
+      expect(newUser.rootID).toBeTruthy();
     });
   });
 

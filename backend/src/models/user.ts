@@ -1,15 +1,17 @@
-import { Schema, model, Document } from 'mongoose';
+import mongoose, { Schema, model, Document } from 'mongoose';
 import bcrypt from 'bcrypt';
 
 interface IUser extends Document {
   email: string;
   password: string;
+  rootID?: mongoose.Types.ObjectId;
   validatePassword: (password: string) => Promise<boolean>;
 }
 
 const userSchema = new Schema<IUser>({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  rootID: { type: mongoose.Types.ObjectId, ref: 'Family Member' },
 });
 
 userSchema.pre(
