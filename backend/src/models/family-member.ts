@@ -1,4 +1,4 @@
-import mongoose, { Schema, model, Document, mongo } from 'mongoose';
+import mongoose, { Schema, model, Document } from 'mongoose';
 
 interface IFamilyMember extends Document {
   name: string;
