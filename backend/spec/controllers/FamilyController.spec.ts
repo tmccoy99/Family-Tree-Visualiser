@@ -41,8 +41,8 @@ describe('Family Controller testing', () => {
         expect(response.status).toBe(201);
       });
 
-      test('saves family member into database and returns new token', async () => {
-        await testRequest(app)
+      test('saves family member into database and returns valid token', async () => {
+        const response = await testRequest(app)
           .post('/members')
           .set({ Authorization: `Bearer ${token}` })
           .send({
@@ -52,7 +52,9 @@ describe('Family Controller testing', () => {
             root: true,
           });
         const savedMember = await FamilyMember.findOne({});
-        expect(savedMember).toBeTruthy();
+        expect(
+          JWT.verify(response.body.token, process.env.JWT_SECRET as Secret)
+        ).toBeTruthy();
         expect(savedMember).toMatchObject({
           name: 'Jeff',
           birthYear: 1999,
@@ -71,7 +73,7 @@ describe('Family Controller testing', () => {
           });
         const savedMember = (await FamilyMember.findOne({})) as IFamilyMember;
         const updatedUser = (await User.findOne({})) as IUser;
-        expect(updatedUser.rootID?.toString()).toBe(savedMember.id.toString());
+        expect(updatedUser.rootID?.toString()).toBe(savedMember.id);
       });
     });
   });

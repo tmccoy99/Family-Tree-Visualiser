@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import FamilyMember, { IFamilyMember } from '../models/family-member';
-import User, { IUser } from '../models/user';
+import User from '../models/user';
+import tokenGenerator, { generateToken } from './TokenController';
 
 interface IFamilyController {
   Create: (req: Request, res: Response) => void;
@@ -14,7 +15,7 @@ const FamilyController: IFamilyController = {
     });
     await newMember.save();
     await User.findByIdAndUpdate(req.body.userID, { rootID: newMember._id });
-    res.status(201).send();
+    res.status(201).json({ token: generateToken(req.body.userID) });
   },
 };
 
