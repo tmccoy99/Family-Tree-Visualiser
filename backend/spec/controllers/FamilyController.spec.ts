@@ -9,6 +9,7 @@ describe('Family Controller testing', () => {
   let testUser: IUser;
   let token: string;
   beforeAll(async () => {
+    await User.deleteMany({});
     testUser = new User({
       email: 'testing123@example.com',
       password: 'secure',
@@ -35,12 +36,12 @@ describe('Family Controller testing', () => {
             userID: testUser.id,
             name: 'Jeff',
             birthYear: 1999,
-            additionType: 'root',
+            root: true,
           });
         expect(response.status).toBe(201);
       });
 
-      test('saves family member into database', async () => {
+      test('saves family member into database and returns new token', async () => {
         await testRequest(app)
           .post('/members')
           .set({ Authorization: `Bearer ${token}` })
@@ -48,7 +49,7 @@ describe('Family Controller testing', () => {
             userID: testUser.id,
             name: 'Jeff',
             birthYear: 1999,
-            additionType: 'root',
+            root: true,
           });
         const savedMember = await FamilyMember.findOne({});
         expect(savedMember).toBeTruthy();
@@ -56,6 +57,21 @@ describe('Family Controller testing', () => {
           name: 'Jeff',
           birthYear: 1999,
         });
+      });
+
+      test('for root true, saves member id into the rootID field of the user', async () => {
+        await testRequest(app)
+          .post('/members')
+          .set({ Authorization: `Bearer ${token}` })
+          .send({
+            userID: testUser.id,
+            name: 'Jeff',
+            birthYear: 1999,
+            root: true,
+          });
+        const savedMember = (await FamilyMember.findOne({})) as IFamilyMember;
+        const updatedUser = (await User.findOne({})) as IUser;
+        expect(updatedUser.rootID?.toString()).toBe(savedMember.id.toString());
       });
     });
   });
