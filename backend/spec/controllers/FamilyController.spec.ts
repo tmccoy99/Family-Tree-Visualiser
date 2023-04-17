@@ -28,17 +28,17 @@ describe('Family Controller testing', () => {
 
   describe('POST /members route', () => {
     describe('with token, userID and required information', () => {
-      test('sends 201 response', async () => {
+      test('sends 201 response and message OK', async () => {
         const response: testRequest.Response = await testRequest(app)
           .post('/members')
           .set({ Authorization: `Bearer ${token}` })
           .send({
-            userID: testUser.id,
             name: 'Jeff',
             birthYear: 1999,
             root: true,
           });
         expect(response.status).toBe(201);
+        expect(response.body.message).toBe('OK');
       });
 
       test('saves family member into database and returns valid token', async () => {
@@ -46,7 +46,6 @@ describe('Family Controller testing', () => {
           .post('/members')
           .set({ Authorization: `Bearer ${token}` })
           .send({
-            userID: testUser.id,
             name: 'Jeff',
             birthYear: 1999,
             root: true,
@@ -66,7 +65,6 @@ describe('Family Controller testing', () => {
           .post('/members')
           .set({ Authorization: `Bearer ${token}` })
           .send({
-            userID: testUser.id,
             name: 'Jeff',
             birthYear: 1999,
             root: true,
@@ -74,6 +72,30 @@ describe('Family Controller testing', () => {
         const savedMember = (await FamilyMember.findOne({})) as IFamilyMember;
         const updatedUser = (await User.findOne({})) as IUser;
         expect(updatedUser.rootID?.toString()).toBe(savedMember.id);
+      });
+    });
+
+    describe('error handling', () => {
+      test('if token is invalid, response has 401 status and auth error message', async () => {
+        const fakeToken: string = JWT.sign(
+          {
+            userID: testUser.id,
+            iat: Math.floor(Date.now() / 1000),
+            exp: Math.floor(Date.now() / 1000) + 10 * 60,
+          },
+          'fake secret' as Secret
+        );
+        const response = await testRequest(app)
+          .post('/members')
+          .set({ Authorization: `Bearer ${fakeToken}` })
+          .send({
+            userID: testUser.id,
+            name: 'Jeff',
+            birthYear: 1999,
+            root: true,
+          });
+        expect(response.status).toBe(401);
+        expect(response.body.message).toBe('auth error');
       });
     });
   });

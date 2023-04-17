@@ -1,4 +1,6 @@
-import express, { Express } from 'express';
+import express, { Express, Request, Response } from 'express';
+import { TokenPayload } from './controllers/TokenController';
+import JWT, { Secret } from 'jsonwebtoken';
 import tokenRouter from './routes/tokenRouter';
 import userRouter from './routes/userRouter';
 import memberRouter from './routes/memberRouter';
@@ -12,8 +14,28 @@ dotenv.config();
 app.use(logger('dev'));
 app.use(cors());
 
+async function tokenChecker(
+  req: Request,
+  res: Response,
+  next: () => void
+): Promise<void> {
+  const authHeader: string | undefined = req.get('Authorization');
+  const token: string = authHeader ? authHeader.slice(7) : '';
+  try {
+    const payload = (await JWT.verify(
+      token,
+      process.env.JWT_SECRET as Secret
+    )) as TokenPayload;
+    req.body.userID = payload;
+    next();
+  } catch (error) {
+    console.error(error);
+    res.status(401).json({ message: 'auth error' });
+  }
+}
+
 // Route so that e2e testing can reset db
-app.use('/dbreset', async (req, res) => {
+app.use('/dbreset', async (req: Request, res: Response): Promise<void> => {
   if (process.env.NODE_ENV === 'test') {
     await mongoose.connection.dropDatabase();
     res.status(200).json({ message: 'OK' });
@@ -25,6 +47,6 @@ app.use('/dbreset', async (req, res) => {
 app.use(express.json());
 app.use('/tokens', tokenRouter);
 app.use('/users', userRouter);
-app.use('/members', memberRouter);
+app.use('/members', tokenChecker, memberRouter);
 
 export default app;
