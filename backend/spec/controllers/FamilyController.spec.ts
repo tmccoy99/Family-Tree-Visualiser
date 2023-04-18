@@ -89,13 +89,25 @@ describe('Family Controller testing', () => {
           .post('/members')
           .set({ Authorization: `Bearer ${fakeToken}` })
           .send({
-            userID: testUser.id,
             name: 'Jeff',
             birthYear: 1999,
             root: true,
           });
         expect(response.status).toBe(401);
         expect(response.body.message).toBe('auth error');
+      });
+
+      test('other errors return status 500 and message could not create', async () => {
+        const response = await testRequest(app)
+          .post('/members')
+          .set({ Authorization: `Bearer ${token}` })
+          .send({
+            name: 'Jeff',
+            birthYear: 'hello',
+            root: true,
+          });
+        expect(response.status).toBe(500);
+        expect(response.body.message).toBe('could not create');
       });
     });
   });
