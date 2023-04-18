@@ -2,9 +2,36 @@ import { Request, Response } from 'express';
 import FamilyMember, { IFamilyMember } from '../models/family-member';
 import User from '../models/user';
 import { generateToken } from './TokenController';
+import mongoose from 'mongoose';
 
 interface IFamilyController {
   Create: (req: Request, res: Response) => void;
+}
+
+enum memberAdditionTypes {
+  Root = 'root',
+  Spouse = 'spouse',
+  Child = 'child',
+}
+
+async function updateRelationsAfterCreation(
+  req: Request,
+  newMemberID: mongoose.Types.ObjectId
+): Promise<void> {
+  switch (req.body.relationshipType as memberAdditionTypes) {
+    case memberAdditionTypes.Root:
+      await User.findByIdAndUpdate(req.body.userID, {
+        rootID: newMemberID,
+      });
+    case memberAdditionTypes.Child:
+      await FamilyMember.findByIdAndUpdate(req.body.parentID, {
+        $push: { children: newMemberID },
+      });
+    case memberAdditionTypes.Spouse:
+      await FamilyMember.findByIdAndUpdate(req.body.spouseID, {
+        spouse: newMemberID,
+      });
+  }
 }
 
 const FamilyController: IFamilyController = {
@@ -15,17 +42,7 @@ const FamilyController: IFamilyController = {
         birthYear: req.body.birthYear,
       });
       await newMember.save();
-      switch (req.body.relationshipType) {
-        case 'root':
-          await User.findByIdAndUpdate(req.body.userID, {
-            rootID: newMember._id,
-          });
-          break;
-        case 'child':
-          await FamilyMember.findByIdAndUpdate(req.body.parentID, {
-            $push: { children: newMember._id },
-          });
-      }
+      await updateRelationsAfterCreation(req, newMember._id);
       res
         .status(201)
         .json({ token: generateToken(req.body.userID), message: 'OK' });

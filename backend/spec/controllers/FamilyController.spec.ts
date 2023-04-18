@@ -74,6 +74,30 @@ describe('Family Controller testing', () => {
         expect(updatedUser.rootID?.toString()).toBe(savedMember.id);
       });
 
+      test('for relationshipType spouse, saves member id into the spouse field of its spouse', async () => {
+        const savedMember: IFamilyMember = new FamilyMember({
+          name: 'Derek',
+          birthYear: 1906,
+        });
+        await savedMember.save();
+        await testRequest(app)
+          .post('/members')
+          .set({ Authorization: `Bearer ${token}` })
+          .send({
+            name: 'Dave',
+            birthYear: 1984,
+            relationshipType: 'spouse',
+            spouseID: savedMember.id,
+          });
+        const updatedMember = (await FamilyMember.findById(
+          savedMember.id
+        )) as IFamilyMember;
+        const spouse = (await FamilyMember.findOne({
+          name: 'Dave',
+        })) as IFamilyMember;
+        expect(updatedMember.spouse?.toString()).toBe(spouse.id);
+      });
+
       test('for relationshipType child, saves member id into the children array of its parent', async () => {
         const parent: IFamilyMember = new FamilyMember({
           name: 'Derek',
