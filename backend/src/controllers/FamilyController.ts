@@ -15,7 +15,17 @@ const FamilyController: IFamilyController = {
         birthYear: req.body.birthYear,
       });
       await newMember.save();
-      await User.findByIdAndUpdate(req.body.userID, { rootID: newMember._id });
+      switch (req.body.relationshipType) {
+        case 'root':
+          await User.findByIdAndUpdate(req.body.userID, {
+            rootID: newMember._id,
+          });
+          break;
+        case 'child':
+          await FamilyMember.findByIdAndUpdate(req.body.parentID, {
+            $push: { children: newMember._id },
+          });
+      }
       res
         .status(201)
         .json({ token: generateToken(req.body.userID), message: 'OK' });

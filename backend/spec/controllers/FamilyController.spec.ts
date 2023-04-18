@@ -35,7 +35,7 @@ describe('Family Controller testing', () => {
           .send({
             name: 'Jeff',
             birthYear: 1999,
-            root: true,
+            relationshipType: 'root',
           });
         expect(response.status).toBe(201);
         expect(response.body.message).toBe('OK');
@@ -46,32 +46,56 @@ describe('Family Controller testing', () => {
           .post('/members')
           .set({ Authorization: `Bearer ${token}` })
           .send({
-            name: 'Jeff',
-            birthYear: 1999,
-            root: true,
+            name: 'Grace',
+            birthYear: 1959,
+            relationshipType: 'root',
           });
         const savedMember = await FamilyMember.findOne({});
         expect(
           JWT.verify(response.body.token, process.env.JWT_SECRET as Secret)
         ).toBeTruthy();
         expect(savedMember).toMatchObject({
-          name: 'Jeff',
-          birthYear: 1999,
+          name: 'Grace',
+          birthYear: 1959,
         });
       });
 
-      test('for root true, saves member id into the rootID field of the user', async () => {
+      test('for relationshipType root, saves member id into the rootID field of the user', async () => {
         await testRequest(app)
           .post('/members')
           .set({ Authorization: `Bearer ${token}` })
           .send({
-            name: 'Jeff',
-            birthYear: 1999,
-            root: true,
+            name: 'Karen',
+            birthYear: 2000,
+            relationshipType: 'root',
           });
         const savedMember = (await FamilyMember.findOne({})) as IFamilyMember;
         const updatedUser = (await User.findOne({})) as IUser;
         expect(updatedUser.rootID?.toString()).toBe(savedMember.id);
+      });
+
+      test('for relationshipType child, saves member id into the children array of its parent', async () => {
+        const parent: IFamilyMember = new FamilyMember({
+          name: 'Derek',
+          birthYear: 1906,
+        });
+        await parent.save();
+        await testRequest(app)
+          .post('/members')
+          .set({ Authorization: `Bearer ${token}` })
+          .send({
+            name: 'Dave',
+            birthYear: 1984,
+            relationshipType: 'child',
+            parentID: parent.id,
+          });
+        const updatedParent = (await FamilyMember.findById(
+          parent.id
+        )) as IFamilyMember;
+        const child = (await FamilyMember.findOne({
+          name: 'Dave',
+        })) as IFamilyMember;
+        expect(updatedParent.children[0].toString()).toBe(child.id);
       });
     });
 
@@ -91,7 +115,7 @@ describe('Family Controller testing', () => {
           .send({
             name: 'Jeff',
             birthYear: 1999,
-            root: true,
+            relationshipType: 'root',
           });
         expect(response.status).toBe(401);
         expect(response.body.message).toBe('auth error');
@@ -104,7 +128,7 @@ describe('Family Controller testing', () => {
           .send({
             name: 'Jeff',
             birthYear: 'hello',
-            root: true,
+            relationshipType: 'root',
           });
         expect(response.status).toBe(500);
         expect(response.body.message).toBe('could not create');
