@@ -18,7 +18,7 @@ async function updateRelationsAfterCreation(
   req: Request,
   newMemberID: mongoose.Types.ObjectId
 ): Promise<void> {
-  switch (req.body.relationshipType as memberAdditionTypes) {
+  switch (req.body.additionType as memberAdditionTypes) {
     case memberAdditionTypes.Root:
       await User.findByIdAndUpdate(req.body.userID, {
         rootID: newMemberID,
