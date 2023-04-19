@@ -1,7 +1,7 @@
 <div class="form-container">
   <h2>{{currentState}} to TreeGenie</h2>
   <div> or <a href="#" (click)="toggleState(); $event.preventDefault()">{{otherState | lowercase}}</a> here</div>
-  <form [formGroup]="userDetails" (ngSubmit)="onSubmit(email.value, password.value)">
+  <form [formGroup]="userDetails" (ngSubmit)="onSubmit()">
     <label for="email-input">Email: </label>
     <input #email id="email-input" type="text" placeholder="Your email" formControlName="email">
     <label for="password-input">Password: </label>

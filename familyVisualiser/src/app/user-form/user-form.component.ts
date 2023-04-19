@@ -31,11 +31,14 @@ export class UserFormComponent {
     this.warning = '';
   }
 
-  async onSubmit(email: string, password: string): Promise<void> {
+  async onSubmit(): Promise<void> {
     const endUrl: string = this.currentState === 'Sign up' ? 'users' : 'tokens';
     const response: Response = await fetch(`http://localhost:8085/${endUrl}`, {
       method: 'POST',
-      body: JSON.stringify({ email: email, password: password }),
+      body: JSON.stringify({
+        email: this.userDetails.get('email')?.value,
+        password: this.userDetails.get('password')?.value,
+      }),
       headers: {
         'Content-Type': 'application/json',
       },
