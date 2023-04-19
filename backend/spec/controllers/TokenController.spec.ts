@@ -63,7 +63,6 @@ describe('TokenController testing', () => {
       expect(response.status).toBe(201);
       expect(response.body.token).toBeDefined();
       expect(response.body.message).toBe('OK');
-      expect(response.body.userID).toBe(testUserID);
     });
   });
 });

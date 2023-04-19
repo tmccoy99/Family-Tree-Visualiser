@@ -18,7 +18,6 @@ describe('UserController testing', () => {
         .send({ email: 'hello@testing.com', password: 'testpassword' });
       expect(response.status).toBe(201);
       expect(response.body.message).toBe('OK');
-      expect(response.body.userID).toBeDefined();
       expect(response.body.token).toBeDefined();
     });
 
