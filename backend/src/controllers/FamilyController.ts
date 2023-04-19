@@ -8,7 +8,7 @@ interface IFamilyController {
   Create: (req: Request, res: Response) => void;
 }
 
-enum memberAdditionTypes {
+enum memberCreationTypes {
   Root = 'root',
   Spouse = 'spouse',
   Child = 'child',
@@ -18,16 +18,16 @@ async function updateRelationsAfterCreation(
   req: Request,
   newMemberID: mongoose.Types.ObjectId
 ): Promise<void> {
-  switch (req.body.additionType as memberAdditionTypes) {
-    case memberAdditionTypes.Root:
+  switch (req.body.creationType as memberCreationTypes) {
+    case memberCreationTypes.Root:
       await User.findByIdAndUpdate(req.body.userID, {
         rootID: newMemberID,
       });
-    case memberAdditionTypes.Child:
+    case memberCreationTypes.Child:
       await FamilyMember.findByIdAndUpdate(req.body.parentID, {
         $push: { children: newMemberID },
       });
-    case memberAdditionTypes.Spouse:
+    case memberCreationTypes.Spouse:
       await FamilyMember.findByIdAndUpdate(req.body.spouseID, {
         spouse: newMemberID,
       });

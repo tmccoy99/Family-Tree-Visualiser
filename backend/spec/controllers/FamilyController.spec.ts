@@ -35,7 +35,7 @@ describe('Family Controller testing', () => {
           .send({
             name: 'Jeff',
             birthYear: 1999,
-            additionType: 'root',
+            creationType: 'root',
           });
         expect(response.status).toBe(201);
         expect(response.body.message).toBe('OK');
@@ -48,7 +48,7 @@ describe('Family Controller testing', () => {
           .send({
             name: 'Grace',
             birthYear: 1959,
-            additionType: 'root',
+            creationType: 'root',
           });
         const savedMember = await FamilyMember.findOne({});
         expect(
@@ -60,21 +60,21 @@ describe('Family Controller testing', () => {
         });
       });
 
-      test('for additionType root, saves member id into the rootID field of the user', async () => {
+      test('for creationType root, saves member id into the rootID field of the user', async () => {
         await testRequest(app)
           .post('/members')
           .set({ Authorization: `Bearer ${token}` })
           .send({
             name: 'Karen',
             birthYear: 2000,
-            additionType: 'root',
+            creationType: 'root',
           });
         const savedMember = (await FamilyMember.findOne({})) as IFamilyMember;
         const updatedUser = (await User.findOne({})) as IUser;
         expect(updatedUser.rootID?.toString()).toBe(savedMember.id);
       });
 
-      test('for additionType spouse, saves member id into the spouse field of its spouse', async () => {
+      test('for creationType spouse, saves member id into the spouse field of its spouse', async () => {
         const savedMember: IFamilyMember = new FamilyMember({
           name: 'Derek',
           birthYear: 1906,
@@ -86,7 +86,7 @@ describe('Family Controller testing', () => {
           .send({
             name: 'Dave',
             birthYear: 1984,
-            additionType: 'spouse',
+            creationType: 'spouse',
             spouseID: savedMember.id,
           });
         const updatedMember = (await FamilyMember.findById(
@@ -98,7 +98,7 @@ describe('Family Controller testing', () => {
         expect(updatedMember.spouse?.toString()).toBe(spouse.id);
       });
 
-      test('for additionType child, saves member id into the children array of its parent', async () => {
+      test('for creationType child, saves member id into the children array of its parent', async () => {
         const parent: IFamilyMember = new FamilyMember({
           name: 'Derek',
           birthYear: 1906,
@@ -110,7 +110,7 @@ describe('Family Controller testing', () => {
           .send({
             name: 'Dave',
             birthYear: 1984,
-            additionType: 'child',
+            creationType: 'child',
             parentID: parent.id,
           });
         const updatedParent = (await FamilyMember.findById(
@@ -139,7 +139,7 @@ describe('Family Controller testing', () => {
           .send({
             name: 'Jeff',
             birthYear: 1999,
-            additionType: 'root',
+            creationType: 'root',
           });
         expect(response.status).toBe(401);
         expect(response.body.message).toBe('auth error');
@@ -152,7 +152,7 @@ describe('Family Controller testing', () => {
           .send({
             name: 'Jeff',
             birthYear: 'hello',
-            additionType: 'root',
+            creationType: 'root',
           });
         expect(response.status).toBe(500);
         expect(response.body.message).toBe('could not create');
