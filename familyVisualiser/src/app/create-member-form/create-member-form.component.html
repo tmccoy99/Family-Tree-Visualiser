@@ -1,6 +1,7 @@
-<form [formGroup]="memberDetails">
+<form [formGroup]="memberDetails" (ngSubmit)="onSubmit()">
   <label for="name-input">Name: </label>
   <input type="text" id="name-input" formControlName="name">
   <label for="birth-year-input">Birth Year: </label>
   <input type="number" id="birth-year-input" formControlName="birthYear">
+  <button type="submit" id="submit-member">Submit</button>
 </form>

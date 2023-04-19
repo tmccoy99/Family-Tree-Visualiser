@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CreateMemberTypes } from '../create-member-types';
 
 @Component({
@@ -9,9 +9,26 @@ import { CreateMemberTypes } from '../create-member-types';
 })
 export class CreateMemberFormComponent {
   memberDetails = new FormGroup({
-    name: new FormGroup('', Validators.required),
-    birthYear: new FormGroup(0, Validators.max(new Date().getFullYear())),
+    name: new FormControl('', [Validators.required]),
+    birthYear: new FormControl(null, [
+      Validators.max(new Date().getFullYear()),
+    ]),
   });
 
   @Input() createType: CreateMemberTypes = CreateMemberTypes.Root;
+
+  async onSubmit(): Promise<void> {
+    const response: Response = await fetch('http://localhost:8085/members', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${window.localStorage.getItem('token')}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: this.memberDetails.get('name')?.value,
+        birthYear: this.memberDetails.get('birthYear')?.value,
+        creationType: this.createType,
+      }),
+    });
+  }
 }
