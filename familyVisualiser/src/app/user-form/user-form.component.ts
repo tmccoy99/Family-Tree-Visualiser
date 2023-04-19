@@ -46,7 +46,6 @@ export class UserFormComponent {
     switch (response.status) {
       case 201: {
         const body: SuccesfulUserResponse = await response.json();
-        window.localStorage.setItem('userID', body.userID);
         window.localStorage.setItem('token', body.token);
         this.router.navigate(['/home']);
         break;
