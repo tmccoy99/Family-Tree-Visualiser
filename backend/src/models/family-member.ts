@@ -12,7 +12,7 @@ interface IFamilyMember extends Document {
 const FamilyMemberSchema = new Schema<IFamilyMember>({
   name: { type: String, required: true },
   birthYear: { type: Number, required: true },
-  imageURL: { type: String, default: '../../assets/default_photo.png' },
+  imageURL: { type: String, default: '../../assets/default-profile-photo.png' },
   deathYear: Number,
   children: [{ type: mongoose.Types.ObjectId, ref: 'Family Member' }],
   spouse: { type: mongoose.Types.ObjectId, ref: 'Family Member' },

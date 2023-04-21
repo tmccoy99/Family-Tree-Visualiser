@@ -4,6 +4,7 @@ import FamilyMember, { IFamilyMember } from '../../src/models/family-member';
 import '../mongodb_test_setup';
 import JWT, { Secret } from 'jsonwebtoken';
 import app from '../../src/app';
+import { generateToken } from '../../src/controllers/TokenController';
 
 describe('Family Controller testing', () => {
   let testUser: IUser;
@@ -15,7 +16,7 @@ describe('Family Controller testing', () => {
       password: 'secure',
     });
     await testUser.save();
-    token = JWT.sign(testUser.id, process.env.JWT_SECRET as Secret);
+    token = generateToken(testUser.id);
   });
 
   afterAll(async () => {

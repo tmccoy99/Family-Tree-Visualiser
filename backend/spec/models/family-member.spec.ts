@@ -30,7 +30,9 @@ describe('Family Member Model', () => {
     });
     await Promise.all([memberWithPhoto.save(), memberWithoutPhoto.save()]);
     expect(memberWithPhoto.imageURL).toBe('example/url');
-    expect(memberWithoutPhoto.imageURL).toBe('../../assets/default_photo.png');
+    expect(memberWithoutPhoto.imageURL).toBe(
+      '../../assets/default-profile-photo.png'
+    );
   });
 
   test('non-required fields can also be given', async () => {
