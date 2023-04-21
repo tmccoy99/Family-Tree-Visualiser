@@ -1,0 +1,5 @@
+<div class="member-container" [class.glow]="selected" (click)="select()">
+  <p class="member-name">{{ data.name }}</p>
+  <p class="member-birth">Born: {{ data.birthYear }}</p>
+  <img [src]="data.imageURL" class="member-img" />
+</div>

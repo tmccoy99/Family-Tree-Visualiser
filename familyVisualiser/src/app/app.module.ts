@@ -7,9 +7,10 @@ import { AppComponent } from './app.component';
 import { FamilyTreeComponent } from './family-tree/family-tree.component';
 import { UserFormComponent } from './user-form/user-form.component';
 import { CreateMemberFormComponent } from './create-member-form/create-member-form.component';
+import { FamilyMemberComponent } from './family-member/family-member.component';
 
 @NgModule({
-  declarations: [AppComponent, FamilyTreeComponent, UserFormComponent, CreateMemberFormComponent],
+  declarations: [AppComponent, FamilyTreeComponent, UserFormComponent, CreateMemberFormComponent, FamilyMemberComponent],
   imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, CommonModule],
   providers: [],
   bootstrap: [AppComponent],
