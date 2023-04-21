@@ -22,8 +22,11 @@ async function tokenChecker(
   const authHeader: string | undefined = req.get('Authorization');
   const token: string = authHeader ? authHeader.slice(7) : '';
   try {
-    const payload = await JWT.verify(token, process.env.JWT_SECRET as Secret);
-    req.body.userID = payload;
+    const payload = (await JWT.verify(
+      token,
+      process.env.JWT_SECRET as Secret
+    )) as TokenPayload;
+    req.body.userID = payload.userID;
     next();
   } catch (error) {
     res.status(401).json({ message: 'auth error' });
