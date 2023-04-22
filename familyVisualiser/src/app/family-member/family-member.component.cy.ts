@@ -22,7 +22,13 @@ describe('FamilyMemberComponent', () => {
     );
   });
 
-  // it('should not glow green before being clicked', () => {
-  //   cy.mount
-  // })
+  it('should not glow on initialisation, then glow once clicked', () => {
+    cy.mount(FamilyMemberComponent, {
+      componentProperties: { data: mockMemberData },
+    });
+    const container = cy.get('.member-container');
+    container.should('not.have.class', 'glow');
+    container.click();
+    container.should('have.class', 'glow');
+  });
 });
